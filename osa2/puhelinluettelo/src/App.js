@@ -1,25 +1,20 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import personService from './services/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -29,15 +24,43 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const duplicate = persons.find(person => person.name === newName)
+    const index = persons.findIndex(person => person.name === newName)
+    if (duplicate) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        // console.log('Koko: ', persons.filter(single_person => single_person.id !== duplicate.id).splice(index, 0, "testi"))
+        // console.log('Testi: ', [1, 2, 3, 4].splice(2, 1, 10))
+        // console.log('Index: ', index)
+        personService
+          .update(duplicate.id, person)
+          .then(returnedPerson => {
+            setPersons(persons.slice(0, index).concat(returnedPerson).concat(persons.slice(index + 1, persons.length)))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     }
     else {
-      setNewName(newName)
-      setNewNumber(newNumber)
-      setPersons(persons.concat(person))
-      setNewName('')
-      setNewNumber('')
+      personService
+        .create(person)
+        .then(returnedPerson => {
+          // setNewName(newName)
+          // setNewNumber(newNumber)
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
+  }
+
+  const removePerson = (person) => {
+    // debugger
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .remove(person.id)
+        .then(() => {
+          setPersons(persons.filter(single_person => single_person.id !== person.id))
+        })
     }
   }
 
@@ -62,7 +85,7 @@ const App = () => {
       <h3>Numbers</h3>
       <div>
         {persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase())).map(person =>
-          <Person key={person.name} person={person} />
+          <Person key={person.name} person={person} removePerson={removePerson} />
         )}
       </div>
     </div>
