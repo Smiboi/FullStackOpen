@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "lol",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 2
@@ -22,7 +17,7 @@
     },
     {
       "name": "Jorma Piisinen",
-      "number": "en kerro",
+      "number": "666",
       "id": 5
     },
     {
@@ -51,8 +46,8 @@
       "id": 17
     },
     {
-      "name": "Tarmo",
-      "number": "456",
+      "name": "Kuka lie",
+      "number": "987",
       "id": 18
     }
   ]
