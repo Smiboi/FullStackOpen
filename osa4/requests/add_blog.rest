@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Luonnon ihmeet",
-    "author": "Liisi Mansikkasalmi",
-    "url": "https://www.luontokutsuupi.fi",
-    "likes": 66
+    "title": "Rakkaudesta kaljaan",
+    "author": "Huru Ukko",
+    "url": "https://www.kaljallevaan.fi",
+    "likes": 900
 }
