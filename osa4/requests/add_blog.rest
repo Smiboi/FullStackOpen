@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphbXBwYSIsImlkIjoiNjQ2MjY2NzQ2OTNlZDE4OTNiZDAwNTFkIiwiaWF0IjoxNjg0MTkzNDkzfQ.1kFmEr4xkrSaFvbptAX0ldD_HlHeUDXS9tZyRFjca54
 
 {
-    "title": "Rakkaudesta kaljaan",
-    "author": "Huru Ukko",
-    "url": "https://www.kaljallevaan.fi",
-    "likes": 900
+    "title": "Jösses",
+    "author": "Janne Tulkku",
+    "url": "https://www.josses.fi",
+    "likes": 50
 }
