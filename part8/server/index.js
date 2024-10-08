@@ -32,6 +32,17 @@ const typeDefs = `
     city: String! 
   }
 
+  enum YesNo {
+    YES
+    NO
+  }
+  
+  type Query {
+    personCount: Int!
+    allPersons(phone: YesNo): [Person!]!
+    findPerson(name: String!): Person
+  }
+
   type Person {
     name: String!
     phone: String
@@ -39,14 +50,9 @@ const typeDefs = `
     id: ID!
   }
 
-  enum YesNo {
-    YES
-    NO
-  }
-
   type Query {
     personCount: Int!
-    allPersons(phone: YesNo): [Person!]!
+    allPersons: [Person!]!
     findPerson(name: String!): Person
   }
 
@@ -57,11 +63,12 @@ const typeDefs = `
       street: String!
       city: String!
     ): Person
+
     editNumber(
       name: String!
       phone: String!
     ): Person
-}
+  }
 `
 
 const resolvers = {
@@ -75,16 +82,16 @@ const resolvers = {
         args.phone === 'YES' ? person.phone : !person.phone
       return persons.filter(byPhone)
     },
-      findPerson: (root, args) =>
+    findPerson: (root, args) =>
       persons.find(p => p.name === args.name)
   },
   Person: {
     address: ({ street, city }) => {
-      return { 
+      return {
         street,
         city,
       }
-    }
+    },
   },
   Mutation: {
     addPerson: (root, args) => {
@@ -96,7 +103,6 @@ const resolvers = {
           }
         })
       }
-
       const person = { ...args, id: uuid() }
       persons = persons.concat(person)
       return person
@@ -110,7 +116,7 @@ const resolvers = {
       const updatedPerson = { ...person, phone: args.phone }
       persons = persons.map(p => p.name === args.name ? updatedPerson : p)
       return updatedPerson
-    }   
+    } 
   }
 }
 
@@ -118,6 +124,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 })
+
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
